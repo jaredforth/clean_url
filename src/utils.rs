@@ -1,7 +1,7 @@
 //! Utility functions
 
 use url::{Url, ParseError};
-use reqwest::blocking::Client;
+use reqwest::Client;
 
 /// This function parses an incomplete URL
 /// and returns the full URL.
@@ -40,14 +40,15 @@ pub fn parse_url(url: String) -> Option<String> {
 ///
 /// ```
 /// use servstat::utils::check_status;
+/// use tokio_test::block_on;
 ///
-/// assert_eq!(check_status(String::from("https://httpbin.org/status/200")), Some(String::from("https://httpbin.org/status/200")));
-/// assert_eq!(check_status(String::from("http://www.bertsmithco.com")), Some(String::from("https://bertsmithco.com/")));
-/// assert_eq!(check_status(String::from("https://www.bertsmithco.com")), Some(String::from("https://bertsmithco.com/")));
+/// assert_eq!(block_on(check_status(String::from("https://httpbin.org/status/200"))), Some(String::from("https://httpbin.org/status/200")));
+/// assert_eq!(block_on(check_status(String::from("http://www.bertsmithco.com"))), Some(String::from("https://bertsmithco.com/")));
+/// assert_eq!(block_on(check_status(String::from("https://www.bertsmithco.com"))), Some(String::from("https://bertsmithco.com/")));
 /// ```
-pub fn check_status(url: String) -> Option<String> {
+pub async fn check_status(url: String) -> Option<String> {
     let client = Client::new();
-    match client.get(url.as_str()).send() {
+    match client.get(url.as_str()).send().await {
         Ok(r) => {
             let code = r.status();
             let resp_url = r.url();
