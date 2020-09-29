@@ -8,6 +8,7 @@ use url::{Url, ParseError};
 /// use servstat::return_url;
 ///
 /// assert_eq!(String::from("http://example.com/"), return_url(String::from("example.com")));
+/// assert_eq!(String::from("http://www.example.com/"), return_url(String::from("www.example.com")));
 /// ```
 pub fn return_url(url: String) -> String {
     parse_url(url)
