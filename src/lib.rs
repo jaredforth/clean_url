@@ -7,18 +7,18 @@ use url::{Url, ParseError};
 /// ```
 /// use servstat::return_url;
 ///
-/// assert_eq!(String::from("http://example.com/"), return_url(String::from("example.com")));
-/// assert_eq!(String::from("http://www.example.com/"), return_url(String::from("www.example.com")));
+/// assert_eq!(Some(String::from("http://example.com/")), return_url(String::from("example.com")));
+/// assert_eq!(Some(String::from("http://www.example.com/")), return_url(String::from("www.example.com")));
 /// ```
-pub fn return_url(url: String) -> String {
+pub fn return_url(url: String) -> Option<String> {
     parse_url(url)
 }
 
-fn parse_url(url: String) -> String {
+fn parse_url(url: String) -> Option<String> {
     match Url::parse(url.as_str()) {
         Ok(u) => {
             println!("{:?}", u);
-            u.into_string()
+            Some(u.into_string())
         }
         Err(e) => {
             println!("{:?}", e);
@@ -26,7 +26,7 @@ fn parse_url(url: String) -> String {
                 ParseError::RelativeUrlWithoutBase => {
                     parse_url(format!("http://{}", url))
                 }
-                _ => { String::from("match error") }
+                _ => { None }
             }
         }
     }
