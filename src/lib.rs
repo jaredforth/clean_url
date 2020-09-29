@@ -3,7 +3,15 @@ use reqwest::blocking::Client;
 
 /// Returns a URL
 pub fn return_url(url: String) -> Option<String> {
-    parse_url(url)
+    match parse_url(url) {
+        Some(u) => {
+            check_status(u)
+        }
+        None => {
+            println!("Error parsing URL");
+            None
+        }
+    }
 }
 
 
