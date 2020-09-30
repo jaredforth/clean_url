@@ -9,7 +9,7 @@ use reqwest::Client;
 /// ## Usage:
 ///
 /// ```
-/// use servstat::utils::parse_url;
+/// use clean_url::utils::parse_url;
 ///
 /// assert_eq!(Some(String::from("http://example.com/")), parse_url(String::from("example.com")));
 /// assert_eq!(Some(String::from("http://www.example.com/")), parse_url(String::from("www.example.com")));
@@ -39,7 +39,7 @@ pub fn parse_url(url: String) -> Option<String> {
 /// ## Usage:
 ///
 /// ```
-/// use servstat::utils::check_status;
+/// use clean_url::utils::check_status;
 /// use tokio_test::block_on;
 ///
 /// assert_eq!(block_on(check_status(String::from("https://httpbin.org/status/200"))), Some(String::from("https://httpbin.org/status/200")));
