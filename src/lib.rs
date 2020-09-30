@@ -6,6 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+//! Gets the best version of a URL.
+//!
+//! **clean_url** takes a URL, formats it correctly, and returns the version of the URL
+//! that returns a 200 series response.
+
 use crate::utils::{parse_url, check_status};
 
 pub mod utils;
