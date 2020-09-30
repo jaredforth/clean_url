@@ -9,13 +9,23 @@
 //! Gets the best version of a URL.
 //!
 //! **clean_url** takes a URL, formats it correctly, and returns the version of the URL
-//! that returns a 200 series response.
+//! that returns a 200 series status code.
 
 use crate::utils::{parse_url, check_status};
 
 pub mod utils;
 
-/// Returns a URL
+/// Returns a clean URL that has a 200 series status code
+///
+/// ## Usage:
+///
+/// ```
+/// use clean_url::return_url;
+/// use tokio_test::block_on;
+///
+/// assert_eq!(block_on(return_url(String::from("https://httpbin.org/status/200"))), Some(String::from("https://httpbin.org/status/200")));
+/// assert_eq!(block_on(return_url(String::from("example.com"))), Some(String::from("http://example.com/")));
+/// ```
 pub async fn return_url(url: String) -> Option<String> {
     match parse_url(url) {
         Some(u) => {

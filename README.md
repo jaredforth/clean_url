@@ -4,6 +4,12 @@
 
 # clean_url
 
+- [clean_url](#clean_url)
+  - [Installation and Usage](#installation-and-usage)
+    - [Installation](#installation)
+    - [Usage](#usage)
+  - [License](#license)
+
 This crate takes a URL, formats it correctly, and returns the version of the URL that returns a 200 series response. 
 
 Documentation:
@@ -11,7 +17,7 @@ Documentation:
 
 ## Installation and Usage
 
-### Installation 
+### Installation
 
 Add this to your `Cargo.toml`:
 
@@ -20,9 +26,14 @@ Add this to your `Cargo.toml`:
 clean_url = "0.1"
 ```
 
-### Usage 
+### Usage
 
-
+```rust
+async fn main() {
+    let url = return_url(String::from("example.com")).await;
+    assert_eq(Some("http://example.com"), url);
+}
+```
 
 ## License
 
