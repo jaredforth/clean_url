@@ -4,7 +4,18 @@ version = "0.1.0"
 authors = ["Jared Forth <jaredforthdev@gmail.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "This crate takes a URL, formats it correctly, and returns the version of the URL that returns a 200 series response."
+homepage = "https://crates.io/crates/clean_url"
+repository = "https://github.com/jaredforth/clean_url"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+documentation = "https://docs.rs/clean_url"
+keywords = ["url", "clean", "status-code", "formating"]
+categories = ["web-programming"]
+
+[badges]
+travis-ci = { repository = "jaredforth/clean_url" }
+appveyor = { repository = "jaredforth/clean_url" }
 
 [dependencies]
 url = "2.1.1"
