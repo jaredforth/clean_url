@@ -4,13 +4,20 @@
 
 # clean_url
 
+## About
+
+This crate takes a URL, formats it correctly, and returns the version of the URL that returns a 200 series response. 
+
+## Table of Contents
+
 - [clean_url](#clean_url)
+  - [About](#about)
+  - [Table of Contents](#table-of-contents)
   - [Installation and Usage](#installation-and-usage)
     - [Installation](#installation)
     - [Usage](#usage)
   - [License](#license)
 
-This crate takes a URL, formats it correctly, and returns the version of the URL that returns a 200 series response. 
 
 Documentation:
 -   [API Reference](https://docs.rs/clean_url)
