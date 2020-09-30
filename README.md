@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/jaredforth/clean_url.svg?branch=master)](https://travis-ci.com/jaredforth/clean_url)[![Build status](https://ci.appveyor.com/api/projects/status/ijwnxxl37ivyy67f?svg=true)](https://ci.appveyor.com/project/jaredforth/clean-url)
-[![Crate](https://img.shields.io/crates/v/clean_url.svg)](https://crates.io/crates/clean_url)
-[![API](https://docs.rs/clean_url/badge.svg)](https://docs.rs/clean_url)
+[![Crate](https://img.shields.io/crates/v/clean-url.svg)](https://crates.io/crates/clean-url)
+[![API](https://docs.rs/clean-url/badge.svg)](https://docs.rs/clean-url)
 
 # clean_url
 
