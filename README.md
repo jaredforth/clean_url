@@ -4,6 +4,7 @@
 ![Crates.io](https://img.shields.io/crates/l/clean_url)
 ![Crates.io](https://img.shields.io/crates/v/clean_url)
 ![GitHub top language](https://img.shields.io/github/languages/top/jaredforth/clean_url)
+![Crates.io](https://img.shields.io/crates/d/clean_url)
 
 # clean_url
 
