@@ -11,6 +11,8 @@
 //! **clean_url** takes a URL, formats it correctly, and returns the version of the URL
 //! that returns a 200 series status code.
 
+#[macro_use] extern crate lazy_static;
+
 use crate::utils::{parse_url, check_status};
 
 pub mod utils;

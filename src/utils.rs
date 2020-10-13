@@ -1,5 +1,7 @@
 //! Utility functions
 
+use regex::Regex;
+
 use url::{Url, ParseError};
 use reqwest::Client;
 
@@ -66,4 +68,62 @@ pub async fn check_status(url: String) -> Option<String> {
             None
         }
     }
+}
+
+lazy_static! {
+    static ref WWW_RE: Regex = Regex::new(r"www\.").unwrap();
+}
+
+/// Removes www if a URL has it, and
+/// adds www if a URL does not
+///
+/// ## Usage:
+///
+/// ```
+/// use clean_url::utils::swap_www;
+///use tokio_test::block_on;
+///
+/// assert_eq!(true, block_on(swap_www("http://www.example.com")));
+/// assert_eq!(false, block_on(swap_www("http://example.com")));
+///
+/// //assert_eq!(String::from("http://www.example.com"), swap_www("http://example.com"));
+/// //assert_eq!(String::from("http://example.com"), swap_www("http://www.example.com"));
+/// ```
+pub async fn swap_www(url: &str) -> bool {
+    if has_www(url).await {
+        true
+    } else {
+        false
+    }
+}
+
+/// Checks if a URL uses www
+///
+/// ## Usage:
+///
+/// ```
+/// use clean_url::utils::has_www;
+/// use tokio_test::block_on;
+///
+/// assert_eq!(true, block_on(has_www("http://www.example.com")));
+/// assert_eq!(false, block_on(has_www("http://example.com")));
+///
+/// //assert_eq!(String::from("http://www.example.com"), swap_www("http://example.com"));
+/// //assert_eq!(String::from("http://example.com"), swap_www("http://www.example.com"));
+/// ```
+pub async fn has_www(url: &str) -> bool {
+    WWW_RE.is_match(url)
+}
+
+/// Removes www from a URL
+///
+/// ## Usage:
+/// ```
+/// use clean_url::utils::remove_www;
+/// use tokio_test::block_on;
+///
+/// assert_eq!(String::from("http://example.com"), block_on(remove_www("http://www.example.com".to_string())));
+/// ```
+pub async fn remove_www(url: String) -> String {
+    WWW_RE.replace_all(url.as_str(), "").to_string()
 }

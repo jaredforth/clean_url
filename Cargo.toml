@@ -21,3 +21,5 @@ appveyor = { repository = "jaredforth/clean_url" }
 url = "2.1.1"
 reqwest = "0.10.8"
 tokio-test = "0.2.1"
+regex = "1.4.1"
+lazy_static = "1.4.0"
