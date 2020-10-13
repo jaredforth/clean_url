@@ -47,6 +47,8 @@ pub fn parse_url(url: String) -> Option<String> {
 /// assert_eq!(block_on(check_status(String::from("https://httpbin.org/status/200"))), Some(String::from("https://httpbin.org/status/200")));
 /// assert_eq!(block_on(check_status(String::from("http://www.bertsmithco.com"))), Some(String::from("https://bertsmithco.com/")));
 /// assert_eq!(block_on(check_status(String::from("https://www.bertsmithco.com"))), Some(String::from("https://bertsmithco.com/")));
+/// assert_eq!(block_on(check_status(String::from("https://www.jaredforthmusic.com"))), Some(String::from("https://jaredforthmusic.com/")));
+/// assert_eq!(block_on(check_status(String::from("http://www.jaredforthmusic.com"))), Some(String::from("https://jaredforthmusic.com/")));
 /// ```
 pub async fn check_status(url: String) -> Option<String> {
     let client = Client::new();
@@ -58,9 +60,7 @@ pub async fn check_status(url: String) -> Option<String> {
             if code.is_success() {
                 Some(resp_url.to_string())
             } else {
-                // TODO Does the URL use www? If so, remove it
-                // TODO Does the URL not use www? If so, add it
-                None
+                Some(swap_www(resp_url.as_str()).await)
             }
         }
         Err(e) => {
