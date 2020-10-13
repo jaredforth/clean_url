@@ -72,6 +72,7 @@ pub async fn check_status(url: String) -> Option<String> {
 
 lazy_static! {
     static ref WWW_RE: Regex = Regex::new(r"www\.").unwrap();
+    static ref HTTP_RE: Regex = Regex::new(r"(?P<http>https?://)").unwrap();
 }
 
 /// Removes www if a URL has it, and
@@ -83,17 +84,14 @@ lazy_static! {
 /// use clean_url::utils::swap_www;
 ///use tokio_test::block_on;
 ///
-/// assert_eq!(true, block_on(swap_www("http://www.example.com")));
-/// assert_eq!(false, block_on(swap_www("http://example.com")));
-///
-/// //assert_eq!(String::from("http://www.example.com"), swap_www("http://example.com"));
-/// //assert_eq!(String::from("http://example.com"), swap_www("http://www.example.com"));
+/// assert_eq!(String::from("http://www.example.com"), block_on(swap_www("http://example.com")));
+/// assert_eq!(String::from("http://example.com"), block_on(swap_www("http://www.example.com")));
 /// ```
-pub async fn swap_www(url: &str) -> bool {
+pub async fn swap_www(url: &str) -> String {
     if has_www(url).await {
-        true
+        remove_www(url).await
     } else {
-        false
+        add_www(url).await
     }
 }
 
@@ -122,8 +120,26 @@ pub async fn has_www(url: &str) -> bool {
 /// use clean_url::utils::remove_www;
 /// use tokio_test::block_on;
 ///
-/// assert_eq!(String::from("http://example.com"), block_on(remove_www("http://www.example.com".to_string())));
+/// assert_eq!(String::from("http://example.com"), block_on(remove_www("http://www.example.com")));
 /// ```
-pub async fn remove_www(url: String) -> String {
-    WWW_RE.replace_all(url.as_str(), "").to_string()
+pub async fn remove_www(url: &str) -> String {
+    WWW_RE.replace_all(url, "").to_string()
+}
+
+/// Adds www to a URL
+///
+/// ## Usage:
+/// ```
+/// use clean_url::utils::add_www;
+/// use tokio_test::block_on;
+///
+/// assert_eq!(String::from("http://www.example.com"), block_on(add_www("http://example.com")));
+/// ```
+pub async fn add_www(url: &str) -> String {
+    if !has_www(url).await {
+        HTTP_RE.replace_all(url, "$http-www.").to_string().replace("-", "")
+    } else {
+        println!("Already has www");
+        String::from(url)
+    }
 }
