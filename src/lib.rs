@@ -25,11 +25,12 @@ pub mod utils;
 /// use clean_url::return_url;
 /// use tokio_test::block_on;
 ///
-/// assert_eq!(block_on(return_url(String::from("https://httpbin.org/status/200"))), Some(String::from("https://httpbin.org/status/200")));
-/// assert_eq!(block_on(return_url(String::from("example.com"))), Some(String::from("http://example.com/")));
+/// assert_eq!(block_on(return_url(String::from("https://httpbin.org/status/200"), false)), Some(String::from("https://httpbin.org/status/200")));
+/// assert_eq!(block_on(return_url(String::from("example.com"), false)), Some(String::from("http://example.com/")));
+/// assert_eq!(block_on(return_url(String::from("example.com"), true)), Some(String::from("https://example.com/")));
 /// ```
-pub async fn return_url(url: String) -> Option<String> {
-    match parse_url(url) {
+pub async fn return_url(url: String, is_secure: bool) -> Option<String> {
+    match parse_url(url, is_secure) {
         Some(u) => {
             check_status(u).await
         }

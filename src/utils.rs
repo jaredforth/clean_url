@@ -13,10 +13,12 @@ use reqwest::Client;
 /// ```
 /// use clean_url::utils::parse_url;
 ///
-/// assert_eq!(Some(String::from("http://example.com/")), parse_url(String::from("example.com")));
-/// assert_eq!(Some(String::from("http://www.example.com/")), parse_url(String::from("www.example.com")));
+/// assert_eq!(Some(String::from("http://example.com/")), parse_url(String::from("example.com"), false));
+/// assert_eq!(Some(String::from("https://example.com/")), parse_url(String::from("example.com"), true));
+/// assert_eq!(Some(String::from("http://www.example.com/")), parse_url(String::from("www.example.com"), false));
+/// assert_eq!(Some(String::from("https://www.example.com/")), parse_url(String::from("www.example.com"), true));
 /// ```
-pub fn parse_url(url: String) -> Option<String> {
+pub fn parse_url(url: String, is_secure: bool) -> Option<String> {
     match Url::parse(url.as_str()) {
         Ok(u) => {
             println!("{:?}", u);
@@ -26,7 +28,11 @@ pub fn parse_url(url: String) -> Option<String> {
             println!("{:?}", e);
             match e {
                 ParseError::RelativeUrlWithoutBase => {
-                    parse_url(format!("http://{}", url))
+                    if is_secure {
+                        parse_url(format!("https://{}", url), is_secure)
+                    } else {
+                        parse_url(format!("http://{}", url), is_secure)
+                    }
                 }
                 _ => { None }
             }
