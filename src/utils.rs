@@ -60,6 +60,7 @@ pub async fn check_status(url: &str) -> Option<String> {
     let client = Client::new();
     match client.get(url).send().await {
         Ok(r) => {
+            println!("{:?}", r);
             let code = r.status();
             let resp_url = r.url();
             println!("{:?} - {:?}", code, resp_url);

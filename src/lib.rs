@@ -74,9 +74,6 @@ pub async fn return_url(url: String) -> Option<String> {
                 }
             }
         }
-        None => {
-            println!("Error parsing URL");
-            None
-        }
+        None => None
     }
 }
