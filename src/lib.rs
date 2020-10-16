@@ -13,7 +13,7 @@
 
 #[macro_use] extern crate lazy_static;
 
-use crate::utils::{parse_url, check_status};
+use crate::utils::{parse_url, check_status, swap_www};
 
 pub mod utils;
 
@@ -25,14 +25,54 @@ pub mod utils;
 /// use clean_url::return_url;
 /// use tokio_test::block_on;
 ///
-/// assert_eq!(block_on(return_url(String::from("https://httpbin.org/status/200"), false)), Some(String::from("https://httpbin.org/status/200")));
-/// assert_eq!(block_on(return_url(String::from("example.com"), false)), Some(String::from("http://example.com/")));
-/// assert_eq!(block_on(return_url(String::from("example.com"), true)), Some(String::from("https://example.com/")));
+/// assert_eq!(block_on(return_url(String::from("httpbin.org/status/200"))), Some(String::from("https://httpbin.org/status/200")));
+/// assert_eq!(block_on(return_url(String::from("example.com"))), Some(String::from("https://example.com/")));
 /// ```
-pub async fn return_url(url: String, is_secure: bool) -> Option<String> {
-    match parse_url(url, is_secure) {
+pub async fn return_url(url: String) -> Option<String> {
+    // Parse URL
+    // check http + www
+    // check just http
+    // if !200,
+    // check https + www
+    // check just https
+    match parse_url(url.clone(), true) {
+        // `u` here will be the original URL + https://
         Some(u) => {
-            check_status(u).await
+            // Check original version of URL
+            match check_status(&u).await {
+                // If success, return
+                Some(s) => Some(s),
+                None => {
+                    // Check next version of URL (either with or without www)
+                    match check_status(&swap_www(&u).await).await {
+                        // If success, return
+                        Some(s2) => Some(s2),
+                        None => {
+                            // Check http version
+                            match parse_url(url, false) {
+                                // `u2` here will be the original URL + http://
+                                Some(u2) => {
+                                    // Check first version
+                                    match check_status(&u2).await {
+                                        // If success, return
+                                        Some(s3) => Some(s3),
+                                        None => {
+                                            // Check second version
+                                            match check_status(&swap_www(&u2).await).await {
+                                                // If success, return
+                                                Some(s4) => Some(s4),
+                                                // Otherwise, this is broken
+                                                None => None
+                                            }
+                                        }
+                                    }
+                                }
+                                None => None
+                            }
+                        }
+                    }
+                }
+            }
         }
         None => {
             println!("Error parsing URL");

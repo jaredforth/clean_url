@@ -50,15 +50,15 @@ pub fn parse_url(url: String, is_secure: bool) -> Option<String> {
 /// use clean_url::utils::check_status;
 /// use tokio_test::block_on;
 ///
-/// assert_eq!(block_on(check_status(String::from("https://httpbin.org/status/200"))), Some(String::from("https://httpbin.org/status/200")));
-/// assert_eq!(block_on(check_status(String::from("http://www.bertsmithco.com"))), Some(String::from("https://bertsmithco.com/")));
-/// assert_eq!(block_on(check_status(String::from("https://www.bertsmithco.com"))), Some(String::from("https://bertsmithco.com/")));
-/// assert_eq!(block_on(check_status(String::from("https://www.jaredforthmusic.com"))), Some(String::from("https://jaredforthmusic.com/")));
-/// assert_eq!(block_on(check_status(String::from("http://www.jaredforthmusic.com"))), Some(String::from("https://jaredforthmusic.com/")));
+/// assert_eq!(block_on(check_status("https://httpbin.org/status/200")), Some(String::from("https://httpbin.org/status/200")));
+/// assert_eq!(block_on(check_status("http://www.bertsmithco.com")), Some(String::from("https://bertsmithco.com/")));
+/// assert_eq!(block_on(check_status("https://www.bertsmithco.com")), Some(String::from("https://bertsmithco.com/")));
+/// assert_eq!(block_on(check_status("https://www.jaredforthmusic.com")), Some(String::from("https://jaredforthmusic.com/")));
+/// assert_eq!(block_on(check_status("http://www.jaredforthmusic.com")), Some(String::from("https://jaredforthmusic.com/")));
 /// ```
-pub async fn check_status(url: String) -> Option<String> {
+pub async fn check_status(url: &str) -> Option<String> {
     let client = Client::new();
-    match client.get(url.as_str()).send().await {
+    match client.get(url).send().await {
         Ok(r) => {
             let code = r.status();
             let resp_url = r.url();
@@ -66,7 +66,7 @@ pub async fn check_status(url: String) -> Option<String> {
             if code.is_success() {
                 Some(resp_url.to_string())
             } else {
-                Some(swap_www(resp_url.as_str()).await)
+                None
             }
         }
         Err(e) => {
