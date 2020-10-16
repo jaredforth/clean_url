@@ -60,11 +60,19 @@ pub async fn check_status(url: &str) -> Option<String> {
     let client = Client::new();
     match client.get(url).send().await {
         Ok(r) => {
-            println!("{:?}", r.headers().get("server"));
             println!("{:?}", r.headers().contains_key("server"));
             let code = r.status();
             let resp_url = r.url();
             println!("{:?} - {:?}", code, resp_url);
+            match r.headers().get("server") {
+                Some(server) => {
+                    if server.to_str().unwrap() == "Squarespace" {
+                        // There is no hope, just return the URL
+                        Some(resp_url.to_string())
+                    }
+                }
+                None => None
+            }
             if code.is_success() {
                 Some(resp_url.to_string())
             } else {
