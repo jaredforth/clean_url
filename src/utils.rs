@@ -60,7 +60,6 @@ pub async fn check_status(url: &str) -> Option<String> {
     let client = Client::new();
     match client.get(url).send().await {
         Ok(r) => {
-            println!("{:?}", r);
             println!("{:?}", r.headers());
             println!("{:?}", r.headers().contains_key("server"));
             let code = r.status();
