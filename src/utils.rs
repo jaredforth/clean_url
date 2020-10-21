@@ -66,6 +66,7 @@ pub async fn check_status(url: &str) -> Option<String> {
             if code.is_success() {
                 Some(resp_url.to_string())
             } else {
+                println!("{:?}", r);
                 match r.headers().get("server") {
                     Some(server) => {
                         let server_name = server.to_str().unwrap();
