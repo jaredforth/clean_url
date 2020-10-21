@@ -70,7 +70,7 @@ pub async fn check_status(url: &str) -> Option<String> {
                 match r.headers().get("server") {
                     Some(server) => {
                         let server_name = server.to_str().unwrap();
-                        if server_name == "Squarespace" || server_name == "cloudflare" {
+                        if server_name == "Squarespace" {
                             // There is no hope, just return the URL
                             Some(resp_url.to_string())
                         } else {
