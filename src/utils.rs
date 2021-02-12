@@ -161,3 +161,28 @@ pub async fn add_www(url: &str) -> String {
         String::from(url)
     }
 }
+
+/// Strips everything but the hostname from a URL
+///
+/// ## Usage:
+/// ```
+/// use clean_url::utils::strip_all;
+/// use tokio_test::block_on;
+///
+/// assert_eq!(String::from("example.com"), block_on(strip_all("http://example.com")));
+/// ```
+pub async fn strip_all(url: &str) -> String {
+    match Url::parse(url) {
+        Ok(u) => {
+            println!("{:?}", u);
+            return match u.host_str() {
+                Some(u) => String::from(u),
+                None => String::from(url)
+            }
+        }
+        Err(e) => {
+            println!("{:?}", e);
+            return String::from(url)
+        }
+    }
+}
