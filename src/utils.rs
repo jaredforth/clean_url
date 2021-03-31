@@ -91,6 +91,7 @@ pub async fn check_status(url: &str) -> Option<String> {
 lazy_static! {
     static ref WWW_RE: Regex = Regex::new(r"www\.").unwrap();
     static ref HTTP_RE: Regex = Regex::new(r"(?P<http>https?://)").unwrap();
+    static ref SLASH_RE: Regex = Regex::new(r"/$").unwrap();
 }
 
 /// Removes www if a URL has it, and
@@ -170,19 +171,34 @@ pub async fn add_www(url: &str) -> String {
 /// use tokio_test::block_on;
 ///
 /// assert_eq!(String::from("example.com"), block_on(strip_all("http://example.com")));
+/// assert_eq!(String::from("example.com"), block_on(strip_all("http://example.com/")));
 /// ```
 pub async fn strip_all(url: &str) -> String {
-    match Url::parse(url) {
+    let u = match Url::parse(url) {
         Ok(u) => {
             println!("{:?}", u);
-            return match u.host_str() {
+            match u.host_str() {
                 Some(u) => String::from(u),
                 None => String::from(url)
             }
         }
         Err(e) => {
             println!("{:?}", e);
-            return String::from(url)
+            String::from(url)
         }
-    }
+    };
+    remove_end_slash(&u).await
+}
+
+/// Removes ending slash from a URL
+///
+/// ## Usage:
+/// ```
+/// use clean_url::utils::{remove_www, remove_end_slash};
+/// use tokio_test::block_on;
+///
+/// assert_eq!(String::from("example.com"), block_on(remove_end_slash("example.com/")));
+/// ```
+pub async fn remove_end_slash(url: &str) -> String {
+    SLASH_RE.replace_all(url, "").to_string()
 }
