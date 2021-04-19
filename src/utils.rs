@@ -92,6 +92,7 @@ lazy_static! {
     static ref WWW_RE: Regex = Regex::new(r"www\.").unwrap();
     static ref HTTP_RE: Regex = Regex::new(r"(?P<http>https?://)").unwrap();
     static ref SLASH_RE: Regex = Regex::new(r"/$").unwrap();
+    static ref WHITESPACE_RE: Regex = Regex::new(r"\s").unwrap();
 }
 
 /// Removes www if a URL has it, and
@@ -201,4 +202,23 @@ pub async fn strip_all(url: &str) -> String {
 /// ```
 pub async fn remove_end_slash(url: &str) -> String {
     SLASH_RE.replace_all(url, "").to_string()
+}
+
+/// Take string of text and convert to URL-friendly format
+///
+/// ## Usage:
+///
+/// ```
+/// use clean_url::utils::urlify;
+/// use tokio_test::block_on;
+///
+/// assert_eq!(block_on(urlify("Company Name Here")), String::from("company-name-here"));
+/// assert_eq!(block_on(urlify("TEST")), String::from("test"));
+/// assert_eq!(block_on(urlify("TEST-2")), String::from("test-2"));
+/// ```
+pub async fn urlify(raw_text: &str) -> String {
+    // Convert to lowercase
+    let lowercase = raw_text.to_ascii_lowercase();
+    // Replace spaces with -
+    WHITESPACE_RE.replace_all(&lowercase, "-").to_string()
 }
